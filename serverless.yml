@@ -1,0 +1,35 @@
+service: account-ddb-to-rds
+
+custom:
+  environments:
+    local: LOCAL
+    dev: DEV
+    prd: PRD
+  myStage: ${opt:stage, self:provider.stage}
+  scheduleEnabled:
+    local: false
+    dev: false
+    prd: true
+  
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: local
+  region: ap-northeast-2
+  role: 'arn:aws:iam::827066198779:role/lambda-excute'
+  tracing:
+    lambda: true
+  environment:
+    DEBUG_LOG: true
+
+package:
+  excludeDevDependencies: true
+  individually: true
+  exclude:
+    - node_modules/aws-sdk/**
+    - static/**
+    - tools/**
+
+functions:
+  - ${file(./function/function.yml)}
+  
