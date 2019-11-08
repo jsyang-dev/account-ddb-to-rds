@@ -16,7 +16,7 @@ provider:
   runtime: nodejs10.x
   stage: local
   region: ap-northeast-2
-  role: 'arn:aws:iam::827066198779:role/lambda-excute'
+  role: 'arn:aws:iam::827066198779:role/lambda-execute-role'
   tracing:
     lambda: true
   environment:

@@ -1,6 +1,6 @@
 function:
   handler: function/index.handler
-  description: 'Transfer account data in DynamoDB to RDS(${self:custom.myStage})'
+  description: 'Transfer account data in DynamoDB to RDS (${self:custom.myStage})'
   memorySize: 128
   timeout: 30
   environment:
@@ -8,5 +8,5 @@ function:
     DB_ADDR: common.cwnkdef17vae.ap-northeast-2.rds.amazonaws.com
     DB_PORT: 3306
     DB_USER: mbuser
-    DB_PWD: lotte1234!
+    DB_PWD: AQICAHj8ThSyiYI9lHXmE7sN9utI5VZr2AALghw3jCxN2A8blwEiZP18I1O0S7PmZwWUyqunAAAAaDBmBgkqhkiG9w0BBwagWTBXAgEAMFIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM2yEKXmpjxnaZ+jhEAgEQgCW00eegQaqj2HbhgdN2TjvCfakCWOEjVbF7oM7V/1gCE64tvdqW
     DB_DEFAULT: member

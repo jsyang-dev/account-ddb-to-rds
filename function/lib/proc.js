@@ -9,7 +9,7 @@ const proc = (event) => {
         
             // INSERT/MODIFY 존재 여부 확인
             for (let i = 0, len = event.Records.length; i < len; i++) {
-                if (event.Records[i].eventName == 'INSERT' || event.Records[i].eventName == 'MODIFY') {
+                if (event.Records[i].eventName === 'INSERT' || event.Records[i].eventName === 'MODIFY') {
                     cnt++;
                 }
             }

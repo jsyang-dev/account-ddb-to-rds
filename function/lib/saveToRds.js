@@ -12,25 +12,23 @@ let dec_DB_PWD;
 const saveToRds = (event) => {
     return new Promise(async (resolve, reject) => {
         // DB 패스워드 복호화
-        // if (!dec_DB_PWD) {
-        //     // Decrypt code should run once and variables stored outside of the function
-        //     // handler so that these are decrypted once per container
-        //     const kms = new AWS.KMS();
-        //     const data = await kms.decrypt({
-        //         CiphertextBlob: new Buffer(enc_DB_PWD, 'base64')
-        //     }).promise();
+        if (!dec_DB_PWD) {
+            // Decrypt code should run once and variables stored outside of the function
+            // handler so that these are decrypted once per container
+            const kms = new AWS.KMS();
+            const data = await kms.decrypt({
+                CiphertextBlob: new Buffer(enc_DB_PWD, 'base64')
+            }).promise();
             
-        //     dec_DB_PWD = data.Plaintext.toString('ascii');
-        // }
-        // log.debug(dec_DB_PWD);
+            dec_DB_PWD = data.Plaintext.toString('ascii');
+        }
         
         // mysql connection
         const con = mysql.createConnection({
             host: process.env.DB_ADDR,
             port: process.env.DB_PORT,
             user: process.env.DB_USER,
-            password: process.env.DB_PWD
-            // password: dec_DB_PWD
+            password: dec_DB_PWD
         });
         
         con.connect((err) => {
@@ -50,7 +48,7 @@ const saveToRds = (event) => {
                 log.debug('data:', JSON.stringify(data, null, 2));
                 
                 let sql = '';
-                if (event.Records[i].eventName == 'INSERT') {
+                if (event.Records[i].eventName === 'INSERT') {
                     // insert query 생성
                     sql = `INSERT INTO ${dbDefault}.account
                             (username,
@@ -65,7 +63,7 @@ const saveToRds = (event) => {
                             '${data.phone }',
                             '${data.email }');`;
                     
-                } else if (event.Records[i].eventName == 'MODIFY') {
+                } else if (event.Records[i].eventName === 'MODIFY') {
                     // insert query 생성
                     sql = `UPDATE ${dbDefault}.account
                             SET
@@ -77,7 +75,7 @@ const saveToRds = (event) => {
                 }
                     
                 log.debug('sql: ', sql);
-                con.query(sql, function (err, results, fields) {
+                con.query(sql, function (err, results) {
                     if (err) {
                         log.error('Error: ', err);
                         con.end();
@@ -87,7 +85,7 @@ const saveToRds = (event) => {
                         cnt++;
                     }
                     
-                    if (cnt == len) {
+                    if (cnt === len) {
                         con.end();
                         resolve();
                     }
